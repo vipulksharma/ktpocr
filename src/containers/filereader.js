@@ -11,7 +11,7 @@ class FileReader extends Component {
       super(props);
       this.state = {
         inputKtp : '',
-        inputFile : ''
+        inputFile : '', prediction: {}
       }
     }
     callPredictions = () => {
@@ -19,39 +19,45 @@ class FileReader extends Component {
       if(!inputKtp && !inputFile) {
         return false;
       }
+
       const opts = {
-        inputFile : inputFile,
-        inputKtp : inputKtp
+        image_url : inputFile,
+        image : inputFile
       }
-      fetch('https://api.github.com/gists', {
+      fetch('http://10.255.150.61:6969/api/v1/model/predict/python/python/text_proposal/v1', {
         method: 'post',
         body: JSON.stringify(opts)
       }).then(function(response) {
-        console.log(response.json())
+        if(response) {
+          alert(response.json());
+          this.setState({prediction: response.json()})
+        }
       }).then(function(data) {
         console.log(data)
       });
     }
     handleFiles = files => {
-      this.setState({inputFile: files})
+      this.setState({inputFile: files.base64})
     }
 
     setInputValue = (e) => {
       this.setState({inputKtp : e.target.value})
     }
+    // <input type='text' className='input-ktp' placeholder='Please enter KTP' value={inputKtp} onChange={this.setInputValue}></input>
 
     render(){
-        const { showColumnMapper, inputKtp } = this.state;
+        const { showColumnMapper, inputKtp, inputFile, prediction } = this.state;
         const { addresses } = this.props;
         return (
           <div>
-            <input type='text' className='input-ktp' placeholder='Please enter KTP' value={inputKtp} onChange={this.setInputValue}></input>
             <ReactFileReader base64={true} handleFiles={this.handleFiles}>
               <button className='btn'>Upload KTP</button>
             </ReactFileReader>
+            <img src={inputFile}></img>
             <div className='center'>
               <button type='button' className="btn" label="Predict" onClick={() => this.callPredictions()}>Predict</button>
             </div>
+
         </div>
         )
     }
