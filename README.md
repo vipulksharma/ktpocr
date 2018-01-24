@@ -1,9 +1,11 @@
-The application accepts csv file and shows the address as markers on map.
-# Steps
-1. clone the Repository
+KTP OCR
 
-npm install
+CLONE REPO
 
-npm start
-# Start the server
-localhost:3000 to start server
+YARN INSTALL
+
+YARN START
+
+yarn run build -- --release
+
+pm2 start build/server.js || pm2 restart build/server.js

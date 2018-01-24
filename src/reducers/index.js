@@ -1,9 +1,8 @@
 import { combineReducers } from 'redux';
-import addressReducer from './address';
+import user from './user';
+import runtime from './runtime';
 
-
-const ktpOcrApp = combineReducers({
-    addressReducer
-})
-
-export default ktpOcrApp
+export default combineReducers({
+  user,
+  runtime,
+});
