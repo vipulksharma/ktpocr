@@ -22,7 +22,8 @@ class Home extends React.Component {
     this.state = {
       inputKtp : '',
       inputFile : '',
-      prediction: {}
+      prediction: {},
+      response: {}
     }
   }
   callPredictions = async () => {
@@ -35,7 +36,6 @@ class Home extends React.Component {
       image_url : inputFile,
       image : inputFile
     }
-    console.log(opts);
     const fetchConfig = {
       method: 'post',
       headers: {
@@ -43,12 +43,12 @@ class Home extends React.Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(opts),
-      credentials: 'include',
     };
     console.log(fetchConfig);
-    const resp = await fetch('http://10.255.150.61:6969/api/v1/model/predict/python/python/text_proposal/v1', fetchConfig);
-    resp.json().then((response) => { 
+    const resp = await fetch('http://172.21.45.247:8080/invocations', fetchConfig);
+    resp.json().then((response) => {
       console.log(response.json())
+      this.setState({response : response.json()})
     }).then(function(data) {
       console.log(data);
     })
@@ -62,13 +62,15 @@ class Home extends React.Component {
   }
 
   render() {
-    const { showColumnMapper, inputKtp, inputFile, prediction } = this.state;
+    const { showColumnMapper, inputKtp, inputFile, prediction, response } = this.state;
     return (
       <div>
         <div>
-          <ReactFileReader base64={true} handleFiles={this.handleFiles}>
-            <button >Upload KTP</button>
-          </ReactFileReader>
+          <div className={s.center}>
+            <ReactFileReader base64={true} handleFiles={this.handleFiles}>
+              <button >Upload Image</button>
+            </ReactFileReader>
+          </div>
           {
             inputFile && <img src={inputFile}></img>
           }
@@ -76,6 +78,7 @@ class Home extends React.Component {
             <button type='button' className={s.btn} label="Predict" onClick={() => this.callPredictions()}>Predict</button>
           </div>
         </div>
+        { response && <div>{JSON.stringify(response)}</div> }
       </div>
     );
   }
