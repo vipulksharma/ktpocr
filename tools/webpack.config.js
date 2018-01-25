@@ -338,7 +338,7 @@ const clientConfig = {
               dead_code: true,
               screw_ie8: true,
             },
-            mangle: false
+            mangle: false,
             output: {
               comments: false,
               screw_ie8: true,
