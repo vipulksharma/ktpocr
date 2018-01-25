@@ -33,7 +33,7 @@ class Home extends React.Component {
     }
 
     const opts = {
-      image_url : inputFile,
+      image_url : inputKtp,
       image : inputFile
     }
     const fetchConfig = {
@@ -58,6 +58,7 @@ class Home extends React.Component {
   }
 
   setInputValue = (e) => {
+    console.log(e);
     this.setState({inputKtp : e.target.value})
   }
 
@@ -66,6 +67,9 @@ class Home extends React.Component {
     return (
       <div>
         <div>
+          <div className={s.center}>
+            <input type='text' placeholder='Please enter image url' value={inputKtp} onChange={this.setInputValue}/>
+          </div>
           <div className={s.center}>
             <ReactFileReader base64={true} handleFiles={this.handleFiles}>
               <button >Upload Image</button>
