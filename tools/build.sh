@@ -1,4 +1,4 @@
 git pull origin production
-YARN INSTALL
+yarn install
 yarn run build -- --release
 pm2 restart build/server.js
