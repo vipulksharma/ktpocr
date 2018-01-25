@@ -12,6 +12,7 @@ import webpack from 'webpack';
 import AssetsPlugin from 'assets-webpack-plugin';
 import nodeExternals from 'webpack-node-externals';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+const CompressionPlugin = require('compression-webpack-plugin');
 import overrideRules from './lib/overrideRules';
 import pkg from '../package.json';
 
@@ -346,10 +347,17 @@ const clientConfig = {
             sourceMap: true,
           }),
         ]),
+        new CompressionPlugin({
+        asset: '[path].gz[query]',
+        algorithm: 'gzip',
+        test: /\.js$|\.html$/,
+        threshold: 10240,
+        minRatio: 0.8,
+      }),
 
     // Webpack Bundle Analyzer
     // https://github.com/th0r/webpack-bundle-analyzer
-    ...(isAnalyze ? [new BundleAnalyzerPlugin()] : []),
+    ...[new BundleAnalyzerPlugin()],
   ],
 
   // Some libraries import Node modules but don't use them in the browser.
