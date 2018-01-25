@@ -47,10 +47,9 @@ class Home extends React.Component {
     console.log(fetchConfig);
     const resp = await fetch('http://172.21.45.247:8080/invocations', fetchConfig);
     resp.json().then((response) => {
-      console.log(response.json())
       this.setState({response : response.json()})
     }).then(function(data) {
-      console.log(data);
+      alert('api call failed');
     })
   }
   handleFiles = files => {
@@ -76,7 +75,7 @@ class Home extends React.Component {
             </ReactFileReader>
           </div>
           {
-            inputFile && <img src={inputFile}></img>
+            inputFile && <img className={s.wd600} src={inputFile}></img>
           }
           <div className={s.center}>
             <button type='button' className={s.btn} label="Predict" onClick={() => this.callPredictions()}>Predict</button>
