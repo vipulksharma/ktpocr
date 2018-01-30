@@ -12,7 +12,6 @@ import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Home.css';
 import ReactFileReader from 'react-file-reader';
-
 class Home extends React.Component {
   static propTypes = {
   };
@@ -21,8 +20,8 @@ class Home extends React.Component {
     super(props);
     this.state = {
       inputKtp : '',
-      inputFile : '',
       prediction: {},
+      inputFile: '',
       response: {}
     }
   }
@@ -52,16 +51,24 @@ class Home extends React.Component {
     })
   }
   handleFiles = files => {
-    this.setState({inputFile: files.base64})
+    const file    = document.querySelector('input[type=file]').files[0];
+    const reader  = new FileReader();
+    const that = this;
+    reader.addEventListener("load", function () {
+      that.setState({inputFile: reader.result})
+    }, false);
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   }
 
   setInputValue = (e) => {
-    console.log(e);
     this.setState({inputKtp : e.target.value})
   }
 
   render() {
-    const { showColumnMapper, inputKtp, inputFile, prediction, response } = this.state;
+    const { showColumnMapper, inputKtp, prediction, response, inputFile } = this.state;
     return (
       <div>
         <div>
@@ -69,9 +76,7 @@ class Home extends React.Component {
             <input type='text' placeholder='Please enter image url' value={inputKtp} onChange={this.setInputValue}/>
           </div>
           <div className={s.center}>
-            <ReactFileReader base64={true} handleFiles={this.handleFiles}>
-              <button >Upload Image</button>
-            </ReactFileReader>
+            <input type="file" onChange={this.handleFiles}/>
           </div>
           {
             inputFile && <img className={s.wd600} src={inputFile}></img>
